@@ -26,14 +26,14 @@ class NewVisitorTest(unittest.TestCase):
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(
                 inputbox.get_attribute('placeholder'),
-                'Enter a to-do list'
+                'Enter a to-do item'
         )
 # He types "Reserve Paris rugby match ticket" 'cause he loves rugby
         inputbox.send_keys('Reserve Paris rugby match')
 
 # He hits enter and the page shows
 # "1: Reserver Paris rugby match ticket" as an item in the list
-        inputbox.send_keys(Keys.enter)
+        inputbox.send_keys(Keys.ENTER)
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
