@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
-import time
+#import time
 
 
 class NewVisitorTest(unittest.TestCase):
@@ -12,6 +12,11 @@ class NewVisitorTest(unittest.TestCase):
 
     def tearDown(self):
         self.browser.quit()
+
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
 
     def test_can_start_a_list_and_retrieve_it_later(self):
 
@@ -36,6 +41,8 @@ class NewVisitorTest(unittest.TestCase):
 # "1: Reserver Paris rugby match ticket" as an item in the list
         inputbox.send_keys(Keys.ENTER)
 
+        self.check_for_row_in_list_table('1: Reserve Paris rugby match')
+
         # There is still a text box inviting to write a new item
 # He enters "Reserve hotel in paris"
         inputbox = self.browser.find_element_by_id('id_new_item')
@@ -44,12 +51,9 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Reserve Paris rugby match',
-                      [row.text for row in rows])
-
-        # The page updates and show both items
-        self.assertIn('2: Reserve hotel in Paris',
-                      [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Reserve Paris rugby match')
+       # The page updates and show both items
+        self.check_for_row_in_list_table('2: Reserve hotel in Paris')
 
         self.fail('Finish the test.')
 
