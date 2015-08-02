@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
+import time
 
 
 class NewVisitorTest(unittest.TestCase):
@@ -35,18 +36,23 @@ class NewVisitorTest(unittest.TestCase):
 # "1: Reserver Paris rugby match ticket" as an item in the list
         inputbox.send_keys(Keys.ENTER)
 
+        # There is still a text box inviting to write a new item
+# He enters "Reserve hotel in paris"
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Reserve hotel in Paris')
+        inputbox.send_keys(Keys.ENTER)
+
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-                any(row.text == '1: Reserver Paris rugby match' for row in rows)
-        )
+        self.assertIn('1: Reserve Paris rugby match',
+                      [row.text for row in rows])
 
-
-# There is still a text box inviting to write a new item
-# He enters "Reserve hotel in paris"
+        # The page updates and show both items
+        self.assertIn('2: Reserve hotel in Paris',
+                      [row.text for row in rows])
 
         self.fail('Finish the test.')
-# The page updates and show both items
+
 
 # He wonders if still be able to se the list when he closes his browser
 # The list has generated a unique URL - and an explanatory message about it
